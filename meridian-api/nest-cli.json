@@ -3,32 +3,12 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "deleteOutDir": false,
-    "webpack": false,
-    "typeCheck": false,
-    "watchAssets": true,
-    "assets": [
-      {
-        "include": "**/*.proto",
-        "watchAssets": true
-      },
-      {
-        "include": "**/*.graphql",
-        "watchAssets": true
-      }
-    ],
-    "plugins": [
-      {
-        "name": "@nestjs/swagger",
-        "options": {
-          "classValidatorShim": false,
-          "introspectComments": true
-        }
-      }
-    ]
-  },
-  "generateOptions": {
-    "spec": true,
-    "flat": false
+    "deleteOutDir": true,
+    "assets" : [{
+    "include": "./mail/template",
+    "OutDir" : "dist/mail/template",
+    "watchAssets" : true
+  }]
   }
+  
 }

@@ -1,32 +1,39 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DataResponseInterceptor } from './commom/interceptor/data-response/data-response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
 
-  // Global validation pipe
+  // Set global validation pipes
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions:{
+        enableImplicitConversion: true,
+      }
     }),
   );
 
-  // API prefix
-  const apiPrefix = configService.get<string>('API_PREFIX', 'api/v1');
-  app.setGlobalPrefix(apiPrefix);
+  // Swagger configuration
+  const config = new DocumentBuilder()
+    .setTitle('Blog ApI') // Add a title
+    .setDescription('The API description')// Add a description
+    .setTermsOfService('http://localhost:3000/terms of service')
+    .setVersion('1.0') // Set the API version
+    .build();
 
-  // CORS
-  app.enableCors();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document); // Serve Swagger at '/api'
 
-  const port = configService.get<number>('PORT', 3000);
-  await app.listen(port);
+  //making intwerceptor global
+  app.useGlobalInterceptors(new DataResponseInterceptor)
 
-  console.log(`Application is running on: http://localhost:${port}/${apiPrefix}`);
+  await app.listen(process.env.PORT ?? 3000);
 }
 
 bootstrap();
