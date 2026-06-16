@@ -1,20 +1,17 @@
-import { Injectable,Inject,RequestTimeoutException,BadRequestException, HttpException, HttpStatus, forwardRef } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 // import { GetuserParamDto } from "src/DTO/userparamdto";
 import { InjectRepository } from "@nestjs/typeorm";
-import { DataSource, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { User } from "../user.entity";
 import { CreateUserDto } from "src/DTO/create-user.dto";
 import { GetPostsParamDto } from "src/DTO/postparamdto"; 
 import { EditUserDto } from "src/DTO/patch-user.dto";
-import { AuthService } from "src/auth/providers/auth.service";
-import { HashingProvider } from "src/auth/providers/hashing";
 import { CreateUserProvider } from "./create-user.provider";
 import { FindOneByEmail } from "./find-one-by-email";
 // import { Pagination } from "src/commom/pagination/Provider/pagination";
 import { CreateManyUser } from "./createManyUser.Provider";
 import { CreateManyUsersDto } from "../dtos/createManyUserdto";
 import { CreateUserBookProvider } from "./createUserWithBook";
-import { table } from "console";
 
 @Injectable()
 export class UserService {
@@ -28,17 +25,10 @@ export class UserService {
       //dependecy injection for findoneByemail Provider
       private readonly findOneByemail:FindOneByEmail,
 
-      //circular dependecy injection for Authservice
-      @Inject(forwardRef(() => AuthService))
-          private readonly authService: AuthService,
-
-    private readonly createUserWithBooks:CreateUserBookProvider,
-
+      private readonly createUserWithBooks:CreateUserBookProvider,
 
       // depedency injection of createManyUsers
       private readonly createManyUserService:CreateManyUser,
-
-
   ) {}
     // repository pattern that help commiunicate with the Database 
     // just by doing this we have injected a repository pattern

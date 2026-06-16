@@ -10,6 +10,7 @@ import { CreateManyUser } from './providers/createManyUser.Provider';
 import { CreateUserBookProvider } from './providers/createUserWithBook';
 import { Tweet } from 'src/tweets/dto/tweet.entity';
 import { TweetModule } from 'src/tweets/dto/tweet.module';
+import { UserAuthFacade } from './providers/user-auth.facade';
 
 
 @Module({
@@ -23,8 +24,9 @@ import { TweetModule } from 'src/tweets/dto/tweet.module';
       FindOneByEmail,
       CreateManyUser,
       CreateUserBookProvider,
+      UserAuthFacade,
     
   ],
-  exports: [TypeOrmModule, UserService],
+  exports: [TypeOrmModule, UserService, UserAuthFacade],
 })
 export class UsersModule {}
